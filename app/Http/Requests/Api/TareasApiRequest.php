@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Api;
 
+use App\Http\Response\Api\JsonHttpResponse;
 use Illuminate\Auth\Events\Validated;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
@@ -37,7 +38,11 @@ class TareasApiRequest extends FormRequest
 
         throw new HttpResponseException(
 
-            response()->json(['error' => 'error en el formulario','errors' => $validator->errors()],422)
+            JsonHttpResponse::errorResponse(
+            'error en el formulario'.$validator->errors(),
+            'error',
+            500
+            )
 
         );
 

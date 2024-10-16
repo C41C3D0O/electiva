@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\TareasApiRequest;
+use App\Http\Response\Api\JsonHttpResponse;
 use App\Models\Tarea;
 use App\Models\Tareas;
 use Illuminate\Http\Request;
@@ -16,7 +17,7 @@ class TareaApiController extends Controller
     public function index()
     {
         $tareas = Tarea::get();
-        return response()->json(data: $tareas);
+        return JsonHttpResponse::successResponse($tareas,'succses');
     }
 
     /**
@@ -32,7 +33,7 @@ class TareaApiController extends Controller
             
         ]);
 
-        return response()->json(data: $tareas);
+        return JsonHttpResponse::successResponse($tareas,'creado');
     }
     
 
@@ -42,7 +43,7 @@ class TareaApiController extends Controller
     public function show(string $id)
     {
         $tareas = Tarea::where("id", $id)->first();
-        return response()->json(data: $tareas);
+        return JsonHttpResponse::successResponse($tareas,'succses');
         
     }
 
@@ -65,12 +66,9 @@ class TareaApiController extends Controller
             "fecha_vencimiento" => $request->fecha_vencimiento,
         ]);
     
-        if ($tareas) {
-            return response()->json(['message' => 'el rejistro se actualizo correctamente','data'=>$tareas], 200);
-        }
-        else{
-            return response()->json(['message' => 'el rejistro no existe'], 500);
-        }
+      
+        return JsonHttpResponse::successResponse($tareas,'Actualizado');
+       
     }
 
     /**
@@ -79,11 +77,7 @@ class TareaApiController extends Controller
     public function destroy(string $id)
     {
         $tareas = Tarea::where ('id',$id) -> delete();
-        if ($tareas) {
-            return response()->json(['message' => 'el rejistro se ha eliminado.','data'=>$tareas], 200);
-        }
-        else{
-            return response()->json(['message' => 'el rejistro no existe'], 500);
-        }
+        return JsonHttpResponse::successResponse($tareas,'eliminado');
+        
     }
 }
