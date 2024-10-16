@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\TareasApiRequest;
 use App\Models\Tarea;
 use App\Models\Tareas;
 use Illuminate\Http\Request;
@@ -21,21 +22,17 @@ class TareaApiController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(TareasApiRequest $request)
     {
         $tareas = Tarea::create([
             "nombre" => $request->nombre,
             "descripcion" => $request->descripcion,
             "estado" => $request->estado,
             "fecha_vencimiento" => $request->fecha_vencimiento,
+            
         ]);
-    
-        if ($tareas) {
-            return response()->json(['message' => 'se ha agregado una nueva tarea','data'=>$tareas], 200);
-        }
-        else{
-            return response()->json(['message' => 'error, no se puede agregar una tarea'], 500);
-        } 
+
+        return response()->json(data: $tareas);
     }
     
 
@@ -45,18 +42,14 @@ class TareaApiController extends Controller
     public function show(string $id)
     {
         $tareas = Tarea::where("id", $id)->first();
-        if ($tareas) {
-            return response()->json(data: $tareas);
-        }
-        else{
-            return response()->json(['message' => 'No se pudo encontrar la tarea.'], 500);
-        }
+        return response()->json(data: $tareas);
+        
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(TareasApiRequest $request, string $id)
     {
         $request->validate([
             'nombre' => 'required|string',
